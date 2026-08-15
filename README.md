@@ -12,7 +12,7 @@
 
 In this project, we leverage machine learning to accurately predict the probability that a hotel guest will show up for their booked stay ('0'), or if a no-show will occur ('1').
 
-These probability estimates can support hotel operations and revenue-management decisions, including staffing, inventory planning, reminder campaigns, deposit policies, and overbooking limits. By identifying bookings with a higher risk of no-show, the hotel can make more informed decisions that support business objectives such as reducing operational inefficiencies, protecting revenue, and improving resource allocation.
+These probability estimates can support hotel operations management decisions, including staffing, inventory planning, booking reminders, deposit policies, and overbooking limits. By identifying bookings with a higher risk of no-show, the hotel can make more informed decisions that support business objectives such as reducing operational inefficiencies, improving resource allocation and protecting revenue.
 
 ## 2. Workflow Stages
 
@@ -20,7 +20,9 @@ To achieve the project objective, a machine learning workflow consisting of the 
 
 `noshow.db -> data ingestion -> data cleaning and validation -> feature engineering -> train/test split -> ML experiment -> pipeline selection and calibration -> holdout evaluation and results`
 
-Note: a scikit-learn pipeline is composed of a preprocessor, which feeds engineered and preprocessed features to a machine learning model with specific hyperparameters to make a prediction.
+<p align="center">
+  <img src="notebooks/images/kedro%20pipeline.png" alt="Kedro pipeline workflow" width="700"/>
+</p>
 
 <p align="center">
   <a href="https://weifengsiew.github.io/Hotel-No-Show-Prediction/?types=nodes&expandAllPipelines=false&pid=__default__">
@@ -77,6 +79,8 @@ Multiple candidate pipelines were compared during the ML experiment stage. The b
 
 See [`notebooks/final_results.ipynb`](notebooks/final_results.ipynb) for multiple candidate pipelines compared.
 
+Note: a scikit-learn pipeline is composed of a preprocessor, which feeds engineered and preprocessed features to a machine learning model with specific hyperparameters to make a prediction.
+
 ### Final Results
 
 The calibrated pipeline was evaluated on the test set (20%).
@@ -92,7 +96,7 @@ Moreover, we plot the precision-recall curve to visualise the tradeoff between P
   <img src="notebooks/images/precision_recall_curve.png" alt="Precision-recall curve" width="450"/>
 </p>
 
-Lastly, we plot the calibration curve to assess whether the predicted no-show probabilities align with the actual observed no-show rates. This is important because well-calibrated probabilities enable reliable estimation of operational quantities such as expected no-shows, expected show-ups, under-occupancy risk, over-occupancy risk, and the potential value of targeted interventions such as reminders. These estimates can then inform hotel operations decisions, including staffing, inventory management, reminder campaigns, deposit policies, and overbooking limits, so as to optimize business objectives such as profit.
+Lastly, we plot the calibration curve to assess whether the predicted no-show probabilities align with the actual observed no-show rates. This is important because well-calibrated probabilities enable reliable estimation of operational quantities such as expected no-shows, expected show-ups, under-occupancy risk, over-occupancy risk, and the potential value of targeted interventions such as reminders. These estimates can then inform hotel operations management decisions, including staffing, inventory management, booking reminders, deposit policies, and overbooking limits, supporting business objectives such as reducing operational inefficiencies, improving resource allocation and protecting revenue.
 
 <p align="center">
   <img src="notebooks/images/calibration_curve.png" alt="Calibration curve" width="450"/>
