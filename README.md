@@ -25,7 +25,7 @@ To achieve the project objective, a machine learning workflow consisting of the 
 </p>
 
 <p align="center">
-  <a href="https://weifengsiew.github.io/Hotel-No-Show-Prediction/?types=nodes&expandAllPipelines=false&pid=__default__">
+  <a href="https://weifengsiew.github.io/Machine-Learning-Pipeline-Hotel-No-Shows/?types=nodes&expandAllPipelines=false&pid=__default__">
     <strong>Visualise the workflow stages in detail</strong>
   </a>
 </p>
@@ -109,8 +109,8 @@ See [`notebooks/final_results.ipynb`](notebooks/final_results.ipynb) for the ful
 ### Clone Repository
 
 ```bash
-git clone https://github.com/weifengsiew/Hotel-No-Show-Prediction.git
-cd Hotel-No-Show-Prediction
+git clone https://github.com/weifengsiew/Machine-Learning-Pipeline-Hotel-No-Shows.git
+cd Machine-Learning-Pipeline-Hotel-No-Shows
 ```
 
 ### Environment Setup
