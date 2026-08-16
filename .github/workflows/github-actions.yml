@@ -12,6 +12,7 @@ on:
       - "pyproject.toml"
       - "requirements.txt"
       - "run.sh"
+      - "!**/README.md"
   workflow_dispatch:
 
 jobs:
