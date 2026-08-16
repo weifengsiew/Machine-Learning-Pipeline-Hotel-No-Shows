@@ -9,7 +9,14 @@ import pandas as pd
 
 
 def load_raw_noshow(raw_data_config: dict[str, str]) -> pd.DataFrame:
-    """Load the raw no-show SQLite table."""
+    """Load no-show data from a SQLite table.
+
+    Args:
+        raw_data_config (dict[str, str]): Config containing the SQLite database path and table name.
+
+    Returns:
+        pd.DataFrame: Loaded no-show data.
+    """
     database_path = Path(raw_data_config["path"])
     table_name = raw_data_config["table_name"]
 

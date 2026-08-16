@@ -59,12 +59,27 @@ MONTH_VALUES = list(calendar.month_name)[1:]
 
 
 def add_expectation(expectation_suite: Suite, expectation: Any) -> None:
-    """Add an expectation to a suite without requiring an active GX context."""
+    """Add one validation rule to the rules collection.
+
+    Args:
+        expectation_suite (Suite): Validation rules collection to update.
+        expectation (Any): Validation rule to add.
+
+    Returns:
+        None
+    """
     expectation_suite.expectations.append(expectation)
 
 
 def add_basic_expectations(expectation_suite: Suite) -> None:
-    """Add basic table, uniqueness, and non-null expectations."""
+    """Add rules requiring expected columns, unique rows, unique booking IDs, and no missing values.
+
+    Args:
+        expectation_suite (Suite): Validation rules collection to update.
+
+    Returns:
+        None
+    """
     add_expectation(
         expectation_suite,
         ExpectTableColumnsToMatchOrderedList(column_list=NO_SHOW_COLUMNS),
@@ -86,7 +101,14 @@ def add_basic_expectations(expectation_suite: Suite) -> None:
 
 
 def add_type_expectations(expectation_suite: Suite) -> None:
-    """Add column type expectations."""
+    """Add rules requiring integer columns to be int64 and string columns to be str.
+
+    Args:
+        expectation_suite (Suite): Validation rules collection to update.
+
+    Returns:
+        None
+    """
     for column_name in INTEGER_COLUMNS:
         add_expectation(
             expectation_suite,
@@ -101,7 +123,14 @@ def add_type_expectations(expectation_suite: Suite) -> None:
 
 
 def add_numeric_range_expectations(expectation_suite: Suite) -> None:
-    """Add numeric range expectations."""
+    """Add rules requiring no_show to be 0 or 1, guest counts to be 0-5, and day values to match their month.
+
+    Args:
+        expectation_suite (Suite): Validation rules collection to update.
+
+    Returns:
+        None
+    """
     add_expectation(
         expectation_suite,
         ExpectColumnValuesToBeInSet(column="no_show", value_set=[0.0, 1.0, 0, 1]),
@@ -144,7 +173,14 @@ def add_numeric_range_expectations(expectation_suite: Suite) -> None:
 
 
 def add_string_expectations(expectation_suite: Suite) -> None:
-    """Add allowed-value and string-format expectations."""
+    """Add rules requiring valid categories for text columns and a valid price format.
+
+    Args:
+        expectation_suite (Suite): Validation rules collection to update.
+
+    Returns:
+        None
+    """
     add_expectation(
         expectation_suite,
         ExpectColumnValuesToBeInSet(column="branch", value_set=["Changi", "Orchard"]),

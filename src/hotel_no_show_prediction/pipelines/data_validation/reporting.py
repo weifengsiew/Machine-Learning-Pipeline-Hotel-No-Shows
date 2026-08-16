@@ -16,7 +16,14 @@ CSV_COLUMNS = [
 
 
 def get_affected_field(expectation_kwargs: dict[str, Any]) -> str:
-    """Get field affected by a failed expectation."""
+    """Get the field affected by a failed validation check.
+
+    Args:
+        expectation_kwargs (dict[str, Any]): Arguments from the validation rule.
+
+    Returns:
+        str: Affected column, affected column list, or "table" for table-level checks.
+    """
     if "column" in expectation_kwargs:
         return expectation_kwargs["column"]
     if "column_list" in expectation_kwargs:
@@ -25,20 +32,41 @@ def get_affected_field(expectation_kwargs: dict[str, Any]) -> str:
 
 
 def get_unexpected_percent(expectation_result: dict[str, Any]) -> float | None:
-    """Return the percentage of rows with failed expectations."""
+    """Get the percentage of rows that failed a validation check.
+
+    Args:
+        expectation_result (dict[str, Any]): Result details from a validation check.
+
+    Returns:
+        float | None: Percentage of failed rows, if reported by Great Expectations.
+    """
     if "unexpected_percent_total" in expectation_result:
         return expectation_result["unexpected_percent_total"]
     return None
 
 
 def format_examples(examples: list[Any]) -> str:
-    """Format unique failed values as a compact CSV cell."""
+    """Format example failed values for the validation report.
+
+    Args:
+        examples (list[Any]): Example values that failed a validation check.
+
+    Returns:
+        str: Unique example values joined into one semicolon-separated string.
+    """
     unique_examples = pd.Series(examples, dtype="object").drop_duplicates().head(30)
     return "; ".join(unique_examples.astype(str))
 
 
 def extract_failed_expectations(validation_results: dict[str, Any]) -> list[dict[str, Any]]:
-    """Convert failed Great Expectations results into CSV-ready rows."""
+    """Convert failed validation checks into rows for the validation report.
+
+    Args:
+        validation_results (dict[str, Any]): Validation results from Great Expectations.
+
+    Returns:
+        list[dict[str, Any]]: Failed validation checks formatted as rows.
+    """
     failed_rows = []
     for expectation_result in validation_results["results"]:
         if expectation_result["success"]:
@@ -66,5 +94,12 @@ def extract_failed_expectations(validation_results: dict[str, Any]) -> list[dict
 def format_failed_expectations_report(
     failed_rows: list[dict[str, Any]],
 ) -> pd.DataFrame:
-    """Format failed expectations as the persisted CSV DataFrame."""
+    """Convert failed validation rows into a report DataFrame.
+
+    Args:
+        failed_rows (list[dict[str, Any]]): Failed validation checks formatted as rows.
+
+    Returns:
+        pd.DataFrame: Failed validation report with columns ordered for CSV output.
+    """
     return pd.DataFrame(failed_rows, columns=CSV_COLUMNS)
