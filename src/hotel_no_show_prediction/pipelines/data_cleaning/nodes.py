@@ -1,4 +1,4 @@
-"""Data cleaning nodes"""
+"""Data cleaning nodes."""
 
 from __future__ import annotations
 
@@ -26,17 +26,38 @@ NUMERIC_COLUMN_TYPES = {
 
 
 def drop_duplicate_rows(noshow: pd.DataFrame) -> pd.DataFrame:
-    """Drop exact duplicate rows."""
+    """Remove exact duplicate no-show data rows.
+
+    Args:
+        noshow (pd.DataFrame): No-show data.
+
+    Returns:
+        pd.DataFrame: No-show data with exact duplicate rows removed.
+    """
     return noshow.drop_duplicates().copy()
 
 
 def drop_missing_target_rows(noshow: pd.DataFrame) -> pd.DataFrame:
-    """Drop rows missing the target variable."""
+    """Remove rows with missing target values.
+
+    Args:
+        noshow (pd.DataFrame): No-show data.
+
+    Returns:
+        pd.DataFrame: No-show data with missing target rows removed.
+    """
     return noshow.dropna(subset=[TARGET_COLUMN]).copy()
 
 
 def drop_rows_with_low_missingness(noshow: pd.DataFrame) -> pd.DataFrame:
-    """Drop rows with missing values in low-missingness columns."""
+    """Remove rows when only a small fraction of values is missing in that column.
+
+    Args:
+        noshow (pd.DataFrame): No-show data.
+
+    Returns:
+        pd.DataFrame: No-show data with rows removed for columns below the missingness threshold.
+    """
     missing_count_by_column = noshow.isna().sum()
     missing_rate_by_column = missing_count_by_column / len(noshow)
     low_missingness_columns = [
@@ -48,7 +69,14 @@ def drop_rows_with_low_missingness(noshow: pd.DataFrame) -> pd.DataFrame:
 
 
 def standardize_month_columns(noshow: pd.DataFrame) -> pd.DataFrame:
-    """Standardize month columns to title case (e.g. 'jAnuary' -> 'January')."""
+    """Standardize month names to title case, e.g. "jAnuary" to "January".
+
+    Args:
+        noshow (pd.DataFrame): No-show data.
+
+    Returns:
+        pd.DataFrame: No-show data with month names standardized to title case.
+    """
     cleaned_data = noshow.copy()
     month_columns = [
         column_name
@@ -69,7 +97,14 @@ def standardize_month_columns(noshow: pd.DataFrame) -> pd.DataFrame:
 
 
 def num_adults_words_to_numbers(noshow: pd.DataFrame) -> pd.DataFrame:
-    """Convert num_adults words to numeric strings (e.g. 'one' --> '1')."""
+    """Convert words in num_adults to numeric strings, e.g. "one" to "1".
+
+    Args:
+        noshow (pd.DataFrame): No-show data.
+
+    Returns:
+        pd.DataFrame: No-show data with num_adults words converted to numeric strings.
+    """
     cleaned_data = noshow.copy()
     cleaned_data["num_adults"] = (
         cleaned_data["num_adults"].astype(str).str.lower().replace(ADULT_COUNT_MAPPINGS)
@@ -79,7 +114,14 @@ def num_adults_words_to_numbers(noshow: pd.DataFrame) -> pd.DataFrame:
 
 
 def convert_numeric_column_types(noshow: pd.DataFrame) -> pd.DataFrame:
-    """Convert numeric columns to Int64 dtype."""
+    """Convert columns listed in NUMERIC_COLUMN_TYPES to nullable integer type.
+
+    Args:
+        noshow (pd.DataFrame): No-show data.
+
+    Returns:
+        pd.DataFrame: No-show data with columns in NUMERIC_COLUMN_TYPES converted to nullable integer type.
+    """
     cleaned_data = noshow.copy()
 
     for column_name, target_dtype in NUMERIC_COLUMN_TYPES.items():
@@ -91,14 +133,22 @@ def convert_numeric_column_types(noshow: pd.DataFrame) -> pd.DataFrame:
 
 
 def set_invalid_day_of_month_to_missing(noshow: pd.DataFrame) -> pd.DataFrame:
-    """Set day values invalid for their month columns to missing."""
-    cleaned_data = noshow.copy()
+    """Set day values outside the valid range for their month to missing, e.g. February 31.
 
-    for month_column in [
+    Args:
+        noshow (pd.DataFrame): No-show data.
+
+    Returns:
+        pd.DataFrame: No-show data with invalid day-of-month values set to missing.
+    """
+    cleaned_data = noshow.copy()
+    month_columns = [
         column_name
         for column_name in cleaned_data.columns
         if column_name.endswith("_month")
-    ]:
+    ]
+
+    for month_column in month_columns:
         day_column = f"{month_column.removesuffix('_month')}_day"
         if day_column not in cleaned_data:
             continue
